@@ -18,6 +18,7 @@ while ($currentPage <= 2) {
   foreach ($matches[1] as $value){
       scraperwiki::save_sqlite(array('id'), array('id' => $value));
   }
+  $currentPage++;
 }
 
 //
