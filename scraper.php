@@ -2,11 +2,24 @@
 // This is a template for a PHP scraper on Morph (https://morph.io)
 // including some code snippets below that you should find helpful
 
-// require 'scraperwiki.php';
+require 'scraperwiki.php';
+
+$TotalPageCount = 417;
+$currentPage = 1;
+$matches;
 // require 'scraperwiki/simple_html_dom.php';
 //
 // // Read in a page
-// $html = scraperwiki::scrape("http://foo.com");
+$idpattern = '/BHW&amp;id=(.*)!0/ig';
+while ($currentPage <= 2) {
+  $html = scraperwiki::scrape("http://amt24.sachsen.de/ZFinder/search.do?searchtext=***&filter=3&page=$currentPage");
+  preg_match_all($idpattern, $html, $matches);
+  
+  foreach ($matches[1] as $value){
+      scraperwiki::save_sqlite(array('id'), array('id' => $value));
+  }
+}
+
 //
 // // Find something on the page using css selectors
 // $dom = new simple_html_dom();
