@@ -16,6 +16,7 @@ while ($currentPage <= 2) {
   preg_match_all($idpattern, $html, $matches);
   
   foreach ($matches[1] as $value){
+      echo $value;
       scraperwiki::save_sqlite(array('id'), array('id' => $value));
   }
   $currentPage++;
