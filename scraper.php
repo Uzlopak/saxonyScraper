@@ -12,7 +12,7 @@ $matches;
 // // Read in a page
 $idpattern = '/BHW&amp;id=(.*)!0/';
 while ($currentPage <= 2) {
-  $html = scraperwiki::scrape("http://amt24.sachsen.de/ZFinder/search.do?searchtext=***&filter=3&page=".$currentPage);
+  $html = scraperwiki::scrape("http://amt24.sachsen.de/ZFinder/search.do;jsessionid=IQbMQTxaj+vjA89rF7-+-a04.zufi2_1?modul=WE&searchtextdone=&searchtext=***&filter=3&page=".$currentPage);
   print $html;
   preg_match_all($idpattern, $html, $matches);
   var_dump($matches);
