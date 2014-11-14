@@ -10,7 +10,7 @@ $matches;
 // require 'scraperwiki/simple_html_dom.php';
 //
 // // Read in a page
-$idpattern = '/BHW&amp;id=(.*)!0/g';
+$idpattern = '/BHW&amp;id=(.*)!0/';
 while ($currentPage <= 2) {
   $html = scraperwiki::scrape("http://amt24.sachsen.de/ZFinder/search.do?searchtext=***&filter=3&page=$currentPage");
   preg_match_all($idpattern, $html, $matches);
