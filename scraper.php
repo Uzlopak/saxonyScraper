@@ -20,10 +20,7 @@ $urlpattern = '/<ul class="kontaktliste">.*<li class="internet">.*<a href="(.*)"
 $idpattern = '/BHW&amp;id=(.*)!0/';
 while ($currentPage <= 2) {
   $html = scraperwiki::scrape("http://amt24.sachsen.de/ZFinder/search.do;jsessionid=QLr92E0v7nVp+yix1AQyd5Vn.zufi2_1?modul=WE&searchtextdone=&searchtext=***&filter=3&page=".$currentPage);
-  print $html;
   preg_match_all($idpattern, $html, $matches);
-  var_dump($matches);
-  continue;
   foreach ($matches[1] as $value){
         $output = scraperwiki::scrape("http://amt24.sachsen.de/ZFinder/behoerden.do?action=showdetail&modul=BHW&id=".$value);
       
