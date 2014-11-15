@@ -58,7 +58,7 @@ while ($currentPage <= 2) {
 	$contact = $phonestring . $contactconnector . $faxstring;
 	$jurisdiction__slug = 'saxony';
       
-      scraperwiki::save_sqlite(array('data'), array('name' => $name,'email' => $email, 'address' => $address, 'contact' => $contact, 'jurisdiction__slug' => $jurisdiction__slug));
+      scraperwiki::save_sqlite(array('data'), array('name' => $name,'email' => $email, 'address' => $adress, 'contact' => $contact, 'jurisdiction__slug' => $jurisdiction__slug));
   }
   $currentPage++;
 }
