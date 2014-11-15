@@ -59,25 +59,8 @@ while ($currentPage <= $TotalPageCount) {
 	$jurisdiction__slug = 'saxony';
       
       scraperwiki::save_sqlite(array('data'), array('name' => $name,'email' => $email, 'address' => $adress, 'contact' => $contact, 'jurisdiction__slug' => $jurisdiction__slug, 'other_names' => '', 'description' => '', 'topic__slug' => '', 'parent__name' => '', 'classification' => '', 'url' => $url, 'website_dump' => '', 'request_note' => ''));
-      print $name;
+      print $name . "\n";
   }
   $currentPage++;
 }
-
-//
-// // Find something on the page using css selectors
-// $dom = new simple_html_dom();
-// $dom->load($html);
-// print_r($dom->find("table.list"));
-//
-// // Write out to the sqlite database using scraperwiki library
-// scraperwiki::save_sqlite(array('name'), array('name' => 'susan', 'occupation' => 'software developer'));
-//
-// // An arbitrary query against the database
-// scraperwiki::select("* from data where 'name'='peter'")
-
-// You don't have to do things with the ScraperWiki library. You can use whatever is installed
-// on Morph for PHP (See https://github.com/openaustralia/morph-docker-php) and all that matters
-// is that your final data is written to an Sqlite database called data.sqlite in the current working directory which
-// has at least a table called data.
 ?>
