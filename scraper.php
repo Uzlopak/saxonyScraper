@@ -18,7 +18,7 @@ $emailpattern = '/<ul class="kontaktliste">.*<li class="email">.*<a href="mailto
 $urlpattern = '/<ul class="kontaktliste">.*<li class="internet">.*<a href="(.*)".*>.*<\/a>.*<\/li>/iUs';
 
 $idpattern = '/BHW&amp;id=(.*)!0/';
-while ($currentPage <= 2) {
+while ($currentPage <= $TotalPageCount) {
   $html = scraperwiki::scrape("http://amt24.sachsen.de/ZFinder/search.do;jsessionid=QLr92E0v7nVp+yix1AQyd5Vn.zufi2_1?modul=WE&searchtextdone=&searchtext=***&filter=3&page=".$currentPage);
   preg_match_all($idpattern, $html, $matches);
   foreach ($matches[1] as $value){
@@ -59,7 +59,7 @@ while ($currentPage <= 2) {
 	$jurisdiction__slug = 'saxony';
       
       scraperwiki::save_sqlite(array('data'), array('name' => $name,'email' => $email, 'address' => $adress, 'contact' => $contact, 'jurisdiction__slug' => $jurisdiction__slug, 'other_names' => '', 'description' => '', 'topic__slug' => '', 'parent__name' => '', 'classification' => '', 'url' => $url, 'website_dump' => '', 'request_note' => ''));
-      
+      print $name;
   }
   $currentPage++;
 }
