@@ -19,14 +19,15 @@ $urlpattern = '/<ul class="kontaktliste">.*<li class="internet">.*<a href="(.*)"
 
 $idpattern = '/BHW&amp;id=(.*)!0/';
 while ($currentPage <= 2) {
-  $html = scraperwiki::scrape("http://amt24.sachsen.de/ZFinder/search.do;jsessionid=IQbMQTxaj+vjA89rF7-+-a04.zufi2_1?modul=WE&searchtextdone=&searchtext=***&filter=3&page=".$currentPage);
+  $html = scraperwiki::scrape("http://amt24.sachsen.de/ZFinder/search.do;jsessionid=QLr92E0v7nVp+yix1AQyd5Vn.zufi2_1?modul=WE&searchtextdone=&searchtext=***&filter=3&page=".$currentPage);
   print $html;
   preg_match_all($idpattern, $html, $matches);
   var_dump($matches);
+  continue;
   foreach ($matches[1] as $value){
-      $content = scraperwiki::scrape("http://amt24.sachsen.de/ZFinder/behoerden.do?action=showdetail&modul=BHW&id=".$value);
+        $output = scraperwiki::scrape("http://amt24.sachsen.de/ZFinder/behoerden.do?action=showdetail&modul=BHW&id=".$value);
       
-       preg_match($namepattern, $output, $temp);
+        preg_match($namepattern, $output, $temp);
         $name = (isset($temp[1])) ? str_replace(';', ' -',trim(preg_replace('/\s+/', ' ', $temp[1]))) : '';
         
         preg_match($faxpattern, $output, $temp);
@@ -46,9 +47,9 @@ while ($currentPage <= 2) {
         preg_match($adresspattern2, $output, $temp);
         $adress2 = (isset($temp[1])) ? str_replace(';',',',trim(preg_replace('/\s+/', ' ', $temp[1]))) : '';
         $adress2 = str_ireplace('<br />', ',', $adress2);
-	      $adress2 = strip_tags($adress2);
-	
-	      $adress = (isset($temp[1])) ? $adress2 : $adress1;
+        $adress2 = strip_tags($adress2);
+
+        $adress = (isset($temp[1])) ? $adress2 : $adress1;
 
 
         preg_match($urlpattern, $output, $temp);
