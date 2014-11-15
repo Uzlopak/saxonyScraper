@@ -7,9 +7,16 @@ require 'scraperwiki.php';
 $TotalPageCount = 417;
 $currentPage = 1;
 $matches;
-// require 'scraperwiki/simple_html_dom.php';
-//
-// // Read in a page
+
+//patterns
+$namepattern = '/<h1>(.*)<\/h1>/iUs';
+$adresspattern1 = '/<ul class="kontaktliste2">\s*<li class="post">\s*Hausanschrift:<br \/>\s*(.*)<\/li>/iUs';
+$adresspattern2 = '/<ul class="kontaktliste2">\s*<li class="post">\s*Postanschrift:<br \/>\s*(.*)<\/li>/iUs';
+$phonepattern = '/<ul class="kontaktliste">\s*<li class="telefon">(.*)<\/li>/iUs';
+$faxpattern = '/<ul class="kontaktliste">\s*<li class="telefax">(.*)<\/li>/iUs';
+$emailpattern = '/<ul class="kontaktliste">.*<li class="email">.*<a href="mailto:.*">(.*)<\/a>.*<\/li>/iUs';
+$urlpattern = '/<ul class="kontaktliste">.*<li class="internet">.*<a href="(.*)".*>.*<\/a>.*<\/li>/iUs';
+
 $idpattern = '/BHW&amp;id=(.*)!0/';
 while ($currentPage <= 2) {
   $html = scraperwiki::scrape("http://amt24.sachsen.de/ZFinder/search.do;jsessionid=IQbMQTxaj+vjA89rF7-+-a04.zufi2_1?modul=WE&searchtextdone=&searchtext=***&filter=3&page=".$currentPage);
@@ -17,8 +24,43 @@ while ($currentPage <= 2) {
   preg_match_all($idpattern, $html, $matches);
   var_dump($matches);
   foreach ($matches[1] as $value){
-      echo $value;
-      scraperwiki::save_sqlite(array('id'), array('id' => $value));
+      $content = scraperwiki::scrape("http://amt24.sachsen.de/ZFinder/behoerden.do?action=showdetail&modul=BHW&id=".$value);
+      
+       preg_match($namepattern, $output, $temp);
+        $name = (isset($temp[1])) ? str_replace(';', ' -',trim(preg_replace('/\s+/', ' ', $temp[1]))) : '';
+        
+        preg_match($faxpattern, $output, $temp);
+        $fax = (isset($temp[1])) ? trim(preg_replace('/\s+/', ' ', $temp[1])) : '';
+        
+        preg_match($phonepattern, $output, $temp);
+        $telefon = (isset($temp[1])) ? trim(preg_replace('/\s+/', ' ', $temp[1])) : '';
+        
+        preg_match($emailpattern, $output, $temp);
+        $email =  (isset($temp[1])) ? trim(preg_replace('/\s+/', ' ', $temp[1])) : '';
+        
+        preg_match($adresspattern1, $output, $temp);
+        $adress1 = (isset($temp[1])) ? str_replace(';',',',trim(preg_replace('/\s+/', ' ', $temp[1]))) : '';
+        $adress1 = str_ireplace('<br />', ',', $adress1);
+	      $adress1 = strip_tags($adress1);
+
+        preg_match($adresspattern2, $output, $temp);
+        $adress2 = (isset($temp[1])) ? str_replace(';',',',trim(preg_replace('/\s+/', ' ', $temp[1]))) : '';
+        $adress2 = str_ireplace('<br />', ',', $adress2);
+	      $adress2 = strip_tags($adress2);
+	
+	      $adress = (isset($temp[1])) ? $adress2 : $adress1;
+
+
+        preg_match($urlpattern, $output, $temp);
+        $url = (isset($temp[1])) ? trim(preg_replace('/\s+/', ' ', $temp[1])) : '';
+
+	$phonestring = (strlen(trim($telefon)) != 0) ? trim($telefon) : '';
+	$faxstring = (strlen(trim($fax)) != 0) ? trim($fax) : '';
+	$contactconnector = (strlen($phonestring) > 0 && strlen($faxstring) > 0) ? ', ': '';
+	$contact = $phonestring . $contactconnector . $faxstring;
+	$jurisdiction__slug = 'saxony';
+      
+      scraperwiki::save_sqlite(array('data'), array('name' => $name,'email' => $email, 'address' => $address, 'contact' => $contact, 'jurisdiction__slug' => $jurisdiction__slug));
   }
   $currentPage++;
 }
